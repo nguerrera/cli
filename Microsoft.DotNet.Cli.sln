@@ -143,8 +143,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.DotNet.TestFramew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "redist", "src\redist\redist.csproj", "{098D9321-1201-4974-A75E-F58EBCD98ACF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tool_roslyn", "src\tool_roslyn\tool_roslyn.csproj", "{A0670C63-BA7A-4C1B-B9A7-1CA26A7F235C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tool_msbuild", "src\tool_msbuild\tool_msbuild.csproj", "{D82A3246-9831-4024-A9B2-1932EEF3D56F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tool_nuget", "src\tool_nuget\tool_nuget.csproj", "{BE4C655A-DC54-4408-B739-743456D34111}"
