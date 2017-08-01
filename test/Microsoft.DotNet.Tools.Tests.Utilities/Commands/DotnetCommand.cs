@@ -3,6 +3,7 @@
 
 using Microsoft.DotNet.Cli.Utils;
 using System.IO;
+using System.Linq;
 
 namespace Microsoft.DotNet.Tools.Test.Utilities
 {
@@ -32,10 +33,15 @@ namespace Microsoft.DotNet.Tools.Test.Utilities
                     // otherwise grab it from the environment
                     path = System.Environment.GetEnvironmentVariable("PATH");
                 }
-                // if it's the only item in the path, set it
+
                 if (string.IsNullOrEmpty(path))
                 {
+                    // if it's the only item in the path, set it
                     path = containingDirectory;
+                }
+                else if (path.Split(Path.PathSeparator).Contains(path))
+                {
+                    // it's already present, do nothing
                 }
                 else
                 {
@@ -43,6 +49,7 @@ namespace Microsoft.DotNet.Tools.Test.Utilities
                     // putting it in front so it takes priority
                     path = containingDirectory + Path.PathSeparator + path;
                 }
+
                 Environment["PATH"] = path;
             }
         }
