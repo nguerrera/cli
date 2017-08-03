@@ -22,35 +22,12 @@ namespace Microsoft.DotNet.Tools.Test.Utilities
             // this means that the up-to-date dotnet command is resolved by the
             // old-runtime-targeting RunCsc/Roslyn, causing compatability issues.
             // So, detect if we're running a dotnet that's not just a plain "dotnet",
-            // and if so, make sure it's on the PATH.
+            // and if so, set DOTNET_HOST_PATH, which is recognized as an override
+            // for the location of dotnet.
             var containingDirectory = Path.GetDirectoryName(dotnetUnderTest);
             if (!string.IsNullOrEmpty(containingDirectory))
             {
-                // if it's already set, use that
-                string path;
-                if (!Environment.TryGetValue("PATH", out path))
-                {
-                    // otherwise grab it from the environment
-                    path = System.Environment.GetEnvironmentVariable("PATH");
-                }
-
-                if (string.IsNullOrEmpty(path))
-                {
-                    // if it's the only item in the path, set it
-                    path = containingDirectory;
-                }
-                else if (path.Split(Path.PathSeparator).Contains(path))
-                {
-                    // it's already present, do nothing
-                }
-                else
-                {
-                    // otherwise, join it with the rest of the path,
-                    // putting it in front so it takes priority
-                    path = containingDirectory + Path.PathSeparator + path;
-                }
-
-                Environment["PATH"] = path;
+                Environment["DOTNET_HOST_PATH"] = containingDirectory;
             }
         }
     }
