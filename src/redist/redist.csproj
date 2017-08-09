@@ -80,6 +80,19 @@
     </ItemGroup>
     <Copy SourceFiles="@(RoslynBits)" DestinationFiles="@(RoslynBits->'$(RoslynDirectory)/%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(RoslynSatelliteBits)" DestinationFiles="@(RoslynSatelliteBits->'$(RoslynDirectory)/bincore/%(RecursiveDir)%(Filename)%(Extension)')" />
+    <ItemGroup>
+      <RetargetRuntimeConfigPaths Include="$(RoslynDirectory)/bincore/csc.runtimeconfig.json" />
+      <RetargetRuntimeConfigPaths Include="$(RoslynDirectory)/bincore/vbc.runtimeconfig.json" />
+    </ItemGroup>
+    <PropertyGroup>
+      <ReplacementPattern>"version": ".*"</ReplacementPattern>
+      <ReplacementString>"version": "$(CLI_SharedFrameworkVersion)"</ReplacementString>
+    </PropertyGroup>
+    <ReplaceFileContents
+      InputFile="%(RetargetRuntimeConfigPaths.Identity)"
+      DestinationFile="%(RetargetRuntimeConfigPaths.Identity)"
+      ReplacementPatterns="$(ReplacementPattern)"
+      ReplacementStrings="$(ReplacementString)" />
   </Target>
 
   <Target Name="PublishFSharp"
@@ -318,20 +331,16 @@
           DestinationFiles="@(Stage2Cli->'$(Stage2WithBackwardsCompatibleRuntimesOutputDirectory)/%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 
-  <Target Name="RetargetProjects"
+  <Target Name="RetargetVSTestConsole"
           AfterTargets="Publish">
-    <ItemGroup>
-      <RetargetRuntimeConfigPaths Include="$(PublishDir)/vstest.console.runtimeconfig.json" />
-      <RetargetRuntimeConfigPaths Include="$(PublishDir)/Roslyn/bincore/csc.runtimeconfig.json" />
-      <RetargetRuntimeConfigPaths Include="$(PublishDir)/Roslyn/bincore/vbc.runtimeconfig.json" />
-    </ItemGroup>
     <PropertyGroup>
+      <VSTestRuntimeConfigPath>$(PublishDir)/vstest.console.runtimeconfig.json</VSTestRuntimeConfigPath>
       <ReplacementPattern>"version": ".*"</ReplacementPattern>
       <ReplacementString>"version": "$(CLI_SharedFrameworkVersion)"</ReplacementString>
     </PropertyGroup>
     <ReplaceFileContents
-      InputFile="%(RetargetRuntimeConfigPaths.Identity)"
-      DestinationFile="%(RetargetRuntimeConfigPaths.Identity)"
+      InputFile="$(VSTestRuntimeConfigPath)"
+      DestinationFile="$(VSTestRuntimeConfigPath)"
       ReplacementPatterns="$(ReplacementPattern)"
       ReplacementStrings="$(ReplacementString)" />
   </Target>
