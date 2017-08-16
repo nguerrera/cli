@@ -27,7 +27,8 @@ namespace Microsoft.DotNet.Cli.Utils
                 { "VbcToolPath", GetRunToolPath() },
                 { "CscToolExe", GetRunToolExe("Csc") },
                 { "VbcToolExe", GetRunToolExe("Vbc") },
-                { "MSBuildSDKsPath", GetMSBuildSDKsPath() }
+                { "MSBuildSDKsPath", GetMSBuildSDKsPath() },
+                { "DOTNET_HOST_PATH", GetDotnetPath() },
             };
 
         private readonly IEnumerable<string> _msbuildRequiredParameters =
@@ -89,6 +90,12 @@ namespace Microsoft.DotNet.Cli.Utils
         {
             var scriptExtension = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".cmd" : "";
             return $"Run{compilerName}{scriptExtension}";
+        }
+
+        private static string GetDotnetPath()
+        {
+            var dotnetExecutable = Process.GetCurrentProcess().MainModule.FileName;
+            return Path.GetDirectoryName(dotnetExecutable);
         }
     }
 }
