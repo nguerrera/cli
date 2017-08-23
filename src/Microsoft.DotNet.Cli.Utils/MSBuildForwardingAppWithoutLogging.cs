@@ -94,8 +94,7 @@ namespace Microsoft.DotNet.Cli.Utils
 
         private static string GetDotnetPath()
         {
-            var dotnetExecutable = Process.GetCurrentProcess().MainModule.FileName;
-            return Path.GetDirectoryName(dotnetExecutable);
+            return Process.GetCurrentProcess().MainModule.FileName;
         }
     }
 }
