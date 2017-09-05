@@ -2,15 +2,15 @@
 
 [![.NET Slack Status](https://aspnetcoreslack.herokuapp.com/badge.svg?2)](http://tattoocoder.com/aspnet-slack-sign-up/) [![Join the chat at https://gitter.im/dotnet/cli](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dotnet/cli?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This repo contains the source code for cross-platform [.NET Core](http://github.com/dotnet/core) command line toolchain. It contains the implementation of each command, the native packages for various supported platforms as well as documentation.
+This repo contains the source code for cross-platform [.NET Core](http://github.com/dotnet/core) command line toolchain. It contains the implementation of each command, the native packages for various supported platforms and the documentation.
 
 Looking for V1 of the .NET Core tooling?
 ----------------------------------------
 
-If you are looking for the v1.0.1 release of the .NET Core tools (CLI, MSBuild and the new csproj), head over to https://dot.net/core and download!
+If you are looking for the v2.0 release of the .NET Core tools (CLI, MSBuild and the new csproj), head over to https://dot.net/core and download!
 
-> **Note:** the master branch of the CLI repo is based on the upcoming v2 of .NET Core and is considered pre-release. For production-level usage, please use the
-> v1 of the tools.
+> **Note:** the master branch of the CLI repo is based on post-v2.0 of .NET Core and is considered pre-release. For production-level usage, use the
+> v2.0 of the tools.
 
 Found an issue?
 ---------------
@@ -57,12 +57,12 @@ Build Status
 Installers and Binaries
 -----------------------
 
-You can download .NET Core SDK as either an installer (MSI, PKG) or a zip (zip, tar.gz). .NET Core SDK contains both the .NET Core runtime and CLI tools.
+You can download the .NET Core SDK as either an installer (MSI, PKG) or a zip (zip, tar.gz). The .NET Core SDK contains both the .NET Core runtime and CLI tools.
 
-In order to download just the .NET Core runtime without the SDK, please visit https://github.com/dotnet/core-setup#daily-builds.
+To download the .NET Core runtime **without** the SDK, visit https://github.com/dotnet/core-setup#daily-builds.
 
-> **Note:** please be aware that below installers are the **latest bits**. If you
-> want to install the latest released versions, please check out the [section above](#looking-for-v1-of-the-net-core-tooling).
+> **Note:** Be aware that the following installers are the **latest bits**. If you
+> want to install the latest released versions, check out the [preceding section](#looking-for-v1-of-the-net-core-tooling).
 
 | Platform | Latest Daily Build<br>*master*<br>[![][version-badge]][version] |
 | -------- | :-------------------------------------: |
@@ -208,7 +208,7 @@ Compiling to IL is done using:
 This will drop an IL assembly in `./bin/[configuration]/[framework]/[binary name]`
 that you can run using `dotnet bin/[configuration]/[framework]/[binaryname.dll]`.
 
-For more details, please refer to the [documentation](https://aka.ms/dotnet-cli-docs).
+For more details, refer to the [documentation](https://aka.ms/dotnet-cli-docs).
 
 Building from source
 --------------------
@@ -220,7 +220,7 @@ Read over the [contributing guidelines](CONTRIBUTING.md) and [developer document
 Questions & Comments
 --------------------
 
-For any and all feedback, please use the Issues on this repository.
+For all feedback, use the Issues on this repository.
 
 License
 -------
