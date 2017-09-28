@@ -94,7 +94,7 @@ namespace Microsoft.DotNet.Cli.Utils
 
         private static string GetDotnetPath()
         {
-            return Process.GetCurrentProcess().MainModule.FileName;
+            return new Muxer().MuxerPath;
         }
     }
 }

@@ -51,6 +51,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 REPOROOT="$DIR"
 
 ARCHITECTURE="x64"
+STAGE0_SOURCE_DIR=
+
 source "$REPOROOT/scripts/common/_prettyprint.sh"
 
 BUILD=1
@@ -61,51 +63,44 @@ CUSTOM_BUILD_ARGS=
 # Set nuget package cache under the repo
 [ -z $NUGET_PACKAGES ] && export NUGET_PACKAGES="$REPOROOT/.nuget/packages"
 
-args=( "$@" )
+args=( )
 
 while [[ $# > 0 ]]; do
     lowerI="$(echo $1 | awk '{print tolower($0)}')"
     case $lowerI in
         -c|--configuration)
             export CONFIGURATION=$2
-            args=( "${args[@]/$1}" )
-            args=( "${args[@]/$2}" )
             shift
             ;;
         --nopackage)
             export DOTNET_BUILD_SKIP_PACKAGING=1
-            args=( "${args[@]/$1}" )
             ;;
         --skip-prereqs)
             # Allow CI to disable prereqs check since the CI has the pre-reqs but not ldconfig it seems
             export DOTNET_INSTALL_SKIP_PREREQS=1
-            args=( "${args[@]/$1}" )
             ;;
         --nobuild)
             BUILD=0
             ;;
         --architecture)
             ARCHITECTURE=$2
-            args=( "${args[@]/$1}" )
-            args=( "${args[@]/$2}" )
             shift
             ;;
         --runtime-id)
             CUSTOM_BUILD_ARGS="/p:Rid=\"$2\""
-            args=( "${args[@]/$1}" )
-            args=( "${args[@]/$2}" )
             shift
             ;;
         # This is here just to eat away this parameter because CI still passes this in.
         --targets)            
-            args=( "${args[@]/$1}" )
-            args=( "${args[@]/$2}" )
             shift
             ;;
         --linux-portable)
             LINUX_PORTABLE_INSTALL_ARGS="--runtime-id linux-x64"
             CUSTOM_BUILD_ARGS="/p:Rid=\"linux-x64\" /p:OSName=\"linux\" /p:IslinuxPortable=\"true\""
-            args=( "${args[@]/$1}" )
+            ;;
+        --stage0)
+            STAGE0_SOURCE_DIR=$2
+            shift
             ;;
         --help)
             echo "Usage: $0 [--configuration <CONFIGURATION>] [--skip-prereqs] [--nopackage] [--docker <IMAGENAME>] [--help]"
@@ -117,23 +112,18 @@ while [[ $# > 0 ]]; do
             echo "  --nobuild                           Skip building, showing the command that would be used to build"
             echo "  --docker <IMAGENAME>                Build in Docker using the Dockerfile located in scripts/docker/IMAGENAME"
             echo "  --linux-portable                    Builds the Linux portable .NET Tools instead of a distro-specific version."
+            echo "  --stage0                            Set the stage0 source directory. The default is to download it from Azure."
             echo "  --help                              Display this help message"
             exit 0
             ;;
         *)
+            args=$@
             break
             ;;
     esac
 
     shift
 done
-
-# $args array may have empty elements in it.
-# The easiest way to remove them is to cast to string and back to array.
-# This will actually break quoted arguments, arguments like
-# -test "hello world" will be broken into three arguments instead of two, as it should.
-temp="${args[@]}"
-args=($temp)
 
 # Create an install directory for the stage 0 CLI
 [ -z "$DOTNET_INSTALL_DIR" ] && export DOTNET_INSTALL_DIR=$REPOROOT/.dotnet_stage0/$ARCHITECTURE
@@ -150,7 +140,12 @@ export VSTEST_TRACE_BUILD=1
 export DOTNET_MULTILEVEL_LOOKUP=0
 
 # Install a stage 0
-(set -x ; "$REPOROOT/scripts/obtain/dotnet-install.sh" --channel "master" --install-dir "$DOTNET_INSTALL_DIR" --architecture "$ARCHITECTURE" $LINUX_PORTABLE_INSTALL_ARGS)
+if [ "$STAGE0_SOURCE_DIR" == "" ]; then
+    (set -x ; "$REPOROOT/scripts/obtain/dotnet-install.sh" --channel "master" --version "2.1.0-preview1-007172" --install-dir "$DOTNET_INSTALL_DIR" --architecture "$ARCHITECTURE" $LINUX_PORTABLE_INSTALL_ARGS)
+else
+    echo "Copying bootstrap cli from $BOOTSTRAP_CLI"
+    cp -r $STAGE0_SOURCE_DIR/* "$DOTNET_INSTALL_DIR"
+fi
 
 EXIT_CODE=$?
 if [ $EXIT_CODE != 0 ]; then
@@ -176,8 +171,8 @@ echo "${args[@]}"
 
 if [ $BUILD -eq 1 ]; then
     dotnet msbuild build.proj /p:Architecture=$ARCHITECTURE $CUSTOM_BUILD_ARGS /p:GeneratePropsFile=true /t:WriteDynamicPropsToStaticPropsFiles
-    dotnet msbuild build.proj /m /v:normal /fl /flp:v=diag /p:Architecture=$ARCHITECTURE $CUSTOM_BUILD_ARGS "${args[@]}"
+    dotnet msbuild build.proj /m /v:normal /fl /flp:v=diag /p:Architecture=$ARCHITECTURE $CUSTOM_BUILD_ARGS $args
 else
     echo "Not building due to --nobuild"
-    echo "Command that would be run is: 'dotnet msbuild build.proj /m /p:Architecture=$ARCHITECTURE $CUSTOM_BUILD_ARGS ${args[@]}'"
+    echo "Command that would be run is: 'dotnet msbuild build.proj /m /p:Architecture=$ARCHITECTURE $CUSTOM_BUILD_ARGS $args'"
 fi

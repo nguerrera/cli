@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project InitialTargets="SetSigningProperties" DefaultTargets="SignFiles" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <!-- The signing infrastructure runs using MSBuild 14, which doesn't support some of the new syntax we're using.  So set the BuildingSingingProject
+         property here to avoid importing files we don't need for signing which would cause errors if imported when using MSBuild 14. -->
+    <BuildingSigningProject>true</BuildingSigningProject>
+  </PropertyGroup>
+  
   <Import Project="..\dir.props" />
   <Import Project="MicroBuild.props" />
   <Import Project="$(MicroBuildPropsAndTargetsPath)MicroBuild.Core.props" />
@@ -33,14 +40,23 @@
       <!-- Built binaries -->
       <FilesToSign Include="$(OutputDirectory)/sdk/**/csc.exe;
                             $(OutputDirectory)/sdk/**/csc.dll;
+                            $(OutputDirectory)/sdk/**/vbc.exe;
+                            $(OutputDirectory)/sdk/**/vbc.dll;
+                            $(OutputDirectory)/sdk/**/fsc.exe;
+                            $(OutputDirectory)/sdk/**/fsi.exe;
+                            $(OutputDirectory)/sdk/**/FSharp.*.dll;
                             $(OutputDirectory)/sdk/**/dotnet.dll;
                             $(OutputDirectory)/sdk/**/dotnet.resources.dll;
                             $(OutputDirectory)/sdk/**/System.*.dll;
                             $(OutputDirectory)/sdk/**/Microsoft.*.dll;
                             $(OutputDirectory)/sdk/**/NuGet*.dll;
                             $(OutputDirectory)/sdk/**/datacollector.dll;
+                            $(OutputDirectory)/sdk/**/datacollector.exe;
                             $(OutputDirectory)/sdk/**/MSBuild.dll;
+                            $(OutputDirectory)/sdk/**/MSBuild.resources.dll;
                             $(OutputDirectory)/sdk/**/testhost.dll;
+                            $(OutputDirectory)/sdk/**/testhost.exe;
+                            $(OutputDirectory)/sdk/**/testhost.x86.exe;
                             $(OutputDirectory)/sdk/**/vstest.console.dll;
                             $(OutputDirectory)/sdk/**/vstest.console.resources.dll">
         <Authenticode>$(InternalCertificateId)</Authenticode>
