@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), dir.props))\dir.tasks" />
+
+  <PropertyGroup>
+    <VersionPrefix>$(CliVersionPrefix)</VersionPrefix>
+    <TargetFramework>$(CliTargetFramework)</TargetFramework>
+    <RuntimeFrameworkVersion>$(CLI_SharedFrameworkVersion)</RuntimeFrameworkVersion>
+    <PublishDir>$(RoslynDirectory)/bincore</PublishDir>
+    <VersionSuffix>$(CommitCount)</VersionSuffix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NetCore.App" Version="$(CLI_SharedFrameworkVersion)" />
+    <PackageReference Include="CliDeps.Satellites.Roslyn" Version="$(CLI_Roslyn_Satellites_Version)" />
+  </ItemGroup>
+
+  <Target Name="RemoveFilesAfterPublish"
+          AfterTargets="Publish">
+    <Delete Files="$(PublishDir)/$(TargetName).dll" />
+    <Delete Files="$(PublishDir)/$(TargetName).pdb" />
+    <Delete Files="$(PublishDir)/$(TargetName).runtimeconfig.json" />
+  </Target>
+
+</Project>
