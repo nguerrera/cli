@@ -10,7 +10,7 @@
     <DotnetUserSecretsPackageVersion>2.1.0</DotnetUserSecretsPackageVersion>
     <DotnetWatchPackageVersion>2.1.0</DotnetWatchPackageVersion>
     <MicrosoftNETCoreAppPackageVersion>2.1.1-servicing-26605-02</MicrosoftNETCoreAppPackageVersion>
-    <MicrosoftNETCoreDotNetHostResolverPackageVersion>$(MicrosoftNETCoreAppPackageVersion)</MicrosoftNETCoreDotNetHostResolverPackageVersion>
+    <MicrosoftNETCoreDotNetHostResolverPackageVersion>2.2.0-preview1-26619-01</MicrosoftNETCoreDotNetHostResolverPackageVersion>
     <MicrosoftBuildPackageVersion>15.8.0-preview-000101</MicrosoftBuildPackageVersion>
     <MicrosoftBuildFrameworkPackageVersion>$(MicrosoftBuildPackageVersion)</MicrosoftBuildFrameworkPackageVersion>
     <MicrosoftBuildRuntimePackageVersion>$(MicrosoftBuildPackageVersion)</MicrosoftBuildRuntimePackageVersion>
