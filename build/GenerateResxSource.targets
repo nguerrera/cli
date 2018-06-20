@@ -9,7 +9,8 @@
                            BatchGenerateResxSource">
     <ItemGroup>
       <GeneratedResxSource Include="@(EmbeddedResourceSG->'%(SourceOutputPath)')" />
-      <FileWrites Include="@(GeneratedResxSource)" />
+      <!-- Breaks rebuild in VS -->
+      <!-- <FileWrites Include="@(GeneratedResxSource)" /> -->
       <Compile Include="@(GeneratedResxSource)" />
     </ItemGroup>
   </Target>

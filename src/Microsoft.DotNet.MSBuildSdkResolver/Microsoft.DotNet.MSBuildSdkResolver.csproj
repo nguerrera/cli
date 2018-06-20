@@ -12,6 +12,7 @@
     <PublicSign Condition="'$(OS)' != 'Windows_NT'">true</PublicSign>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <PublishDir>$(SdkResolverOutputDirectory)</PublishDir>
+    <NoWarn>$(NoWarn);NU1603</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
